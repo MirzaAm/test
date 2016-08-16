@@ -1,0 +1,70 @@
+﻿@model WorkPractice.Models.EmpAllowance
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModal-label">Bootstrap Dialog</h4>
+        </div>
+        <div class="modal-body">
+        <h2>Details</h2>
+
+        <div>
+            <h4>EmpAllowance</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.AllowanceName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AllowanceName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.AllowanceAmount)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AllowanceAmount)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.AllowanceRemarks)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AllowanceRemarks)
+                </dd>
+
+            </dl>
+        </div>
+         
+        @using (Html.BeginForm("Details", "Home", FormMethod.Post))
+        {
+            <div class="modal-footer">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Save" id="SaveBtn" class="btn btn-default btn-success" />
+              <button class="btn btn-default" data-dismiss="modal" id="btnCancel">Cancel</button>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+@*<script type="text/javascript">
+    $(function () {
+        $('#approve-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+    });
+</script>*@
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AllowanceID })*@ |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+    </div>

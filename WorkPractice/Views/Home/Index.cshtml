@@ -1,0 +1,119 @@
+﻿@model IEnumerable<WorkPractice.Models.EmpAllowance>
+ 
+@{  
+        ViewBag.Title = "Home Page";  
+}  
+<h2>Index</h2>
+ 
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.0.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+
+
+<h2>Users List</h2>
+<div class="modal fade" id="bootstrapDialog" tabindex="-1" role="dialog" aria-labelledby="myModal-label" aria-hidden="true"></div>
+<p>
+  @Html.ActionLink("Create New", "Create", null, new { @class = "lnkCreate" })
+
+</p>
+
+
+ @{var grid = new WebGrid(Model, canSort: false, canPage: false);
+
+    int rowNum = 0;
+    <div>
+        @grid.GetHtml(columns:
+            grid.Columns
+            (
+                grid.Column("Sr.No", format: item => rowNum = rowNum + 1),
+                //grid.Column("AllowanceName", format: (item) => Html.TextBox("Row" + (rowNum - 1).ToString(), (string)item.AllowanceName)),
+                grid.Column("AllowanceName", format: (item) => Html.Label("EmpNo" + (rowNum).ToString(), (string)item.AllowanceName)),
+                grid.Column("AllowanceAmount", format: (item) => Html.TextBox("Row" + (rowNum).ToString(), (double)item.AllowanceAmount)),
+                grid.Column("AllowanceRemarks", format: (item) => Html.Label("Cash" + (rowNum).ToString(), (string)item.AllowanceRemarks)),
+                grid.Column("What IS this", format: @<input type="button" class="btn-bootstrap-dialog" data-id="@item.AllowanceID" value="Edit"/>)
+            ), mode: WebGridPagerModes.Numeric)
+    </div>                                         
+ }   
+<table>
+ <tr>
+ <th>
+ @Html.DisplayNameFor(model => model.AllowanceName)
+ </th>
+ <th>
+ @Html.DisplayNameFor(model => model.AllowanceAmount)
+ </th>
+ <th>
+ @Html.DisplayNameFor(model => model.AllowanceRemarks)
+ </th>
+ <th></th>
+ </tr>
+ 
+ @foreach (var item in Model)
+ {
+ <tr>
+ <td>
+ @Html.DisplayFor(modelItem => item.AllowanceName)
+ </td>
+ <td>
+ @Html.DisplayFor(modelItem => item.AllowanceAmount)
+ </td>
+ <td>
+ @Html.DisplayFor(modelItem => item.AllowanceRemarks)
+ </td>
+ <td>
+  <button class="btn-bootstrap-dialog" data-id="@item.AllowanceID"> Edit </button>
+ @*<input type="Button" id="btn7"data-url='@Url.Action("Details", new {id =@item.AllowanceID  })'class="modal-link btn btn-default btn-lg" value ="Edit"/>*@
+      @*@Html.ActionLink("Edit", "Edit", new { id = item.AllowanceID }, new { @class = "lnkEdit" , @onclick = "getIdFunction("+@item.AllowanceID+");"})*@ |
+
+ </td>
+ </tr>
+ }
+</table>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.btn-bootstrap-dialog').click(function () {
+            //var url = $('#bootstrapDialog').data('url');
+            var id = $(this).attr("data-id");
+
+            $.ajax({
+                url: '@Url.Action("EditPartial","Home")',
+                        type: "GET",
+                        cache: false,
+                        data: { pp: id }
+                    }).done(function (result) {
+                        $('#bootstrapDialog').html(result);
+
+                        $('#bootstrapDialog').modal('show');
+                    });
+                });
+            });
+ </script>  
+
+@*<h3>Rendering Partial View:</h3>  
+    <ol class="round">  
+        <li class="one">  
+            <h5>By Using Html.RenderPartial #</h5>  
+            @{Html.RenderPartial("PartialView"); }
+        </li>  
+      
+        <li class="two">  
+            <h5>By Using Html.Partial #</h5>  
+            @Html.Partial("PartialView")  
+        </li>  
+      
+        <li class="three">  
+            <h5>By Using Html.RenderAction #</h5>  
+            @{Html.RenderAction("ShowPartialView", "Home");}  
+        </li>  
+
+        <li class="four">  
+            <h5>By Using Html.Action #</h5>  
+            @Html.Action("ShowPartialView");  
+            
+        </li>  
+    </ol>
+
+      *@

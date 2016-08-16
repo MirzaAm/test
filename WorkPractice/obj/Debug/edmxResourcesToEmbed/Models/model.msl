@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WorkPracticeModelStoreContainer" CdmEntityContainer="WorkPracticeEntities">
+    <EntitySetMapping Name="EmpAllowances">
+      <EntityTypeMapping TypeName="WorkPracticeModel.EmpAllowance">
+        <MappingFragment StoreEntitySet="EmpAllowance">
+          <ScalarProperty Name="AllowanceID" ColumnName="AllowanceID" />
+          <ScalarProperty Name="AllowanceName" ColumnName="AllowanceName" />
+          <ScalarProperty Name="AllowanceAmount" ColumnName="AllowanceAmount" />
+          <ScalarProperty Name="AllowanceRemarks" ColumnName="AllowanceRemarks" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,394 @@
+﻿@model IEnumerable<WorkPractice.Models.EmpAllowance>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<link href="~/Content/themes/base/all.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var url = "";
+        $("#dialog-alert").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        if ('@TempData["msg"]' != "") {
+            $("#dialog-alert").dialog('open');
+        }
+
+        $("#dialog-edit").dialog({
+            title: 'Create Allowance',
+            autoOpen: false,
+            resizable: false,
+            width: 400,
+            show: { effect: 'drop', direction: "down" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+                $(this).load(url);
+
+            }
+        });
+
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+
+            },
+            buttons: {
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $("#dialog-detail").dialog({
+            title: 'View Allowance',
+            autoOpen: false,
+            resizable: false,
+            width: 400,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close").hide();
+                $(this).load(url);
+            },
+            buttons: {
+                "Close": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        $(".lnkCreate").on("click", function (e) {
+            //e.preventDefault(); //use this or return false
+            url = $(this).attr('href');
+            $("#dialog-edit").dialog('open');
+
+            return false;
+        });
+
+        $(".lnkEdit").on("click", function (e) {
+            // e.preventDefault(); use this or return false
+            url = $(this).attr('href');
+            // $(".ui-dialog-title").html("Update User");
+            $("#dialog-edit").dialog('open');
+            return false;
+        });
+
+        $(".lnkDelete").on("click", function (e) {
+            // e.preventDefault(); use this or return false
+            url = $(this).attr('href');
+            $("#dialog-confirm").dialog('open');
+
+            return false;
+        });
+
+        $(".lnkDetail").on("click", function (e) {
+            // e.preventDefault(); use this or return false
+            url = $(this).attr('href');
+            $("#dialog-detail").dialog('open');
+
+            return false;
+        });
+
+        $("#btncancel").on("click", function (e) {
+            $("#dialog-edit").dialog("close");
+            return false;
+        });
+    });
+</script>
+
+<div id="dialog-alert" style="display: none">
+ <p>
+ @TempData["msg"]!
+ </p>
+</div>
+ 
+<div id="dialog-confirm" style="display: none">
+ <p>
+ <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+ Are you sure to delete?
+ </p>
+</div>
+ 
+<div id="dialog-edit" style="display: none">
+</div>
+<div id="dialog-detail" style="display: none">
+</div>
+
+<h2>Users List</h2>
+ 
+<p>
+  @Html.ActionLink("Create New", "Create", null, new { @class = "lnkCreate" })
+</p>
+<table>
+ <tr>
+ <th>
+ @Html.DisplayNameFor(model => model.AllowanceName)
+ </th>
+ <th>
+ @Html.DisplayNameFor(model => model.AllowanceAmount)
+ </th>
+ <th>
+ @Html.DisplayNameFor(model => model.AllowanceRemarks)
+ </th>
+ <th></th>
+ </tr>
+ 
+ @foreach (var item in Model)
+ {
+ <tr>
+ <td>
+ @Html.DisplayFor(modelItem => item.AllowanceName)
+ </td>
+ <td>
+ @Html.DisplayFor(modelItem => item.AllowanceAmount)
+ </td>
+ <td>
+ @Html.DisplayFor(modelItem => item.AllowanceRemarks)
+ </td>
+ <td>
+ @Html.ActionLink("Edit", "Edit", new { id = item.AllowanceID }, new { @class = "lnkEdit" }) |
+ @Html.ActionLink("Details", "Details", new { id = item.AllowanceID }, new { @class = "lnkDetail" }) |
+ @Html.ActionLink("Delete", "Delete", new { id = item.AllowanceID }, new { @class = "lnkDelete" })
+ </td>
+ </tr>
+ }
+ 
+</table>
+
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "EmpAllowance", FormMethod.Get))
+                {<p>Find: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @class = "form-control"})  
+                 <input class="btn btn-sm btn-success" type="submit" value="Search" /></p>}
+
+
+<table class="table-bordered">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParam })
+        </th>
+        <th>
+            @Html.ActionLink("AllowanceAmount", "Index", new { sortOrder = ViewBag.AmountSortParam })
+        </th>
+        <th>
+            @Html.ActionLink("AllowanceRemarks", "Index", new { sortOrder = ViewBag.RemarksSortParam })
+        </th>
+        <th></th>
+    </tr>
+
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.AllowanceName
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AllowanceAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AllowanceRemarks)
+        </td>
+        
+         <td>
+            <span id="EditBtn">@Html.ActionLink("Edit", "Edit", new { id=item.AllowanceID })</span> |
+            @Html.ActionLink("Details", "Details", new { id=item.AllowanceID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AllowanceID })
+        </td>
+    </tr>
+}
+
+</table>
+*@
+
+
+@*<script type="text/javascript">
+
+    $(function () {
+        var dialog;
+
+        $("#EditBtn").click(function () {
+            $("#modalWrapper").dialog("open");
+
+        });
+        //var initdialog = function (type) {
+        //    var title = type;
+        $("#modalWrapper").dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+
+            height: 200,
+            width: 400,
+
+            show: {
+                effect: "shake",
+                duration: 100
+            },
+
+            hide: {
+                effect: "explode",
+                duration: 1000
+            },
+            
+            buttons: [{
+                save: function save() {
+                    var allowid = $("#hidid").val();
+                    var allowname = $("#txtallname").val();
+                    var allowamount = $("#txtallamt").val();
+                    var allowremarks = $("#txtallremarks").val();
+
+                    updateallowanceinfo(allowid, allowname, allowamount, allowremarks);
+                    $(this).dialog("destroy");
+                },
+                
+                click: function () { $(this).dialog("destroy"); }
+            }]
+        }),
+
+    
+
+        //$(function () {
+        //    var initDialog = function (type) {
+        //        var title = type;
+
+        //$("#modalWrapper").dialog({                           
+
+        //})
+        //})
+
+
+        function UpdateAllowanceInfo(AllowanceID, AllowanceName, AllowanceAmount, AllowanceRemarks) {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("UpdateAllowance", "EmpAllowance"))",
+                    data: { allowanceID: AllowanceID, allowanceName: AllowanceName, allowanceAmount: AllowanceAmount, allowanceRemarks: AllowanceRemarks },
+                    success: function (data) {
+                        load("@(Url.Action("Index", "Home", new { status = "update" }))");
+                    },
+                    error: function (error) {
+                        //to do:
+                    }
+                });
+                }
+        })
+</script>*@
+
+@*<script type="text/javascript"> 
+    $(function() {
+        $('.editModal').modal();
+    });
+
+    function editProduct(id) {
+        $.ajax({
+            url: '/EmpAllowance/Edit/' + id, // The method name + paramater
+            success: function(data) {
+                $('#modalWrapper').html(data); // This should be an empty div where you can inject your new html (the partial view)
+            }
+        });
+    }
+</script>*@
+
+
+@*<script type="text/javascript">  
+    $(function () {
+
+        var initDialog = function (type) {
+            var title = type;
+            $("#divEdit").dialog({
+                autoOpen: false,
+                modal: true,
+                title: type + ' User',
+                width: 360,
+                buttons: {
+                    Save: function () {
+                        var id = $("#hidID").val();
+                        var role = $("#ddlRoles").val();
+                        var loginName = $("#txtLoginName").val();
+                        var loginPass = $("#txtPassword").val();
+                        var fName = $("#txtFirstName").val();
+                        var lName = $("#txtLastName").val();
+                        var gender = $("#ddlGender").val();
+
+                        UpdateUser(id, loginName, loginPass, fName, lName, gender, role);
+                        $(this).dialog("destroy");
+                    },
+                    Cancel: function () { $(this).dialog("destroy"); }
+                }
+            });
+        }
+
+        function UpdateUser(id, logName, logPass, fName, lName, gender, role) {
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("UpdateUserData","Home"))",
+                data: { userID: id, loginName: logName, password: logPass, firstName: fName, lastName: lName, gender: gender, roleID: role },
+                success: function (data) {
+                    $("#divUserListContainer").load("@(Url.Action("ManageUserPartial","Home", new { status ="update" }))");
+                },
+                error: function (error) {
+                    //to do:
+                }
+            });
+        }
+
+        $("a.lnkEdit").on("click", function () {
+            initDialog("Edit");
+            $(".alert-success").empty();
+            var row = $(this).closest('tr');
+
+            $("#hidID").val(row.find("td:eq(0)").html().trim());
+            $("#txtLoginName").val(row.find("td:eq(1)").html().trim())
+            $("#txtPassword").val(row.find("td:eq(2)").html().trim())
+            $("#txtFirstName").val(row.find("td:eq(3)").html().trim())
+            $("#txtLastName").val(row.find("td:eq(4)").html().trim())
+            $("#ddlGender").val(row.find("td:eq(5)").html().trim())
+            $("#ddlRoles").val(row.find("td:eq(7) > input").val().trim());
+
+            $("#divEdit").dialog("open");
+            return false;
+        });
+    });
+</script>  *@
